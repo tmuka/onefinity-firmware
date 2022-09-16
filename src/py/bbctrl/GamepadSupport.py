@@ -19,7 +19,7 @@ factoryGamepadConfigs = {
         "sign-y": -1,
         "sign-z": -1,
         "deadband": 0.15,
-        "debug": False,
+        "debug": True,
         "type": "XBOX",
     },
     "XBOX": {
@@ -483,6 +483,13 @@ class GamepadSupport(object):
 
         processor(self, command)
 
+    # tony trying to add a pause command button 2022-09-16
+    def _processPauseCommand(self, command: Command):
+            command.gamepad.log("Received pause command: {}".format(command))
+
+        # tony guessed based on values in Cmd.py
+        self.pause = "program" 
+
     def _processSpeedCommand(self, command: Command):
         match = re.match(r"^speed-(\d)$", command.id)
         speed = int(match.group(1)) if match else 0
@@ -555,7 +562,7 @@ class GamepadSupport(object):
         finally:
             # We only update 4 times a second, to keep from overwhelming the system
             # EV_ABS events can happen hundreds of times a second.
-            self.ctrl.ioloop.call_later(0.25, self._updateJogging)
+            self.yctrl.ioloop.call_later(0.25, self._updateJogging)
 
     commandProcessors = {
         "speed-1": _processSpeedCommand,
@@ -567,5 +574,8 @@ class GamepadSupport(object):
         "axis-z": _processAxisCommand,
         "lock-x": _processLockCommand,
         "lock-y": _processLockCommand,
+        "pause":  _processPauseCommand, #tony added
+        #"play":   _processPlayCommand, #tony added
+        #"estop":  _processEstopCommand, #tony added
         "disabled": _processDisabled
     }  # type: dict[str, typing.Callable[[Command], None]]
