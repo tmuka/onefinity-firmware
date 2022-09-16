@@ -36,6 +36,7 @@ factoryGamepadConfigs = {
         "EV_KEY:311": "lock-x",
         "EV_ABS:2": "lock-y",
         "EV_ABS:5": "lock-x",
+        #todo view log to see which key is start/pause
     },
     "PLAYSTATION": {
         "EV_KEY:307": "speed-4",
